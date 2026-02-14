@@ -43,8 +43,12 @@ export const signup = async (req, res) => {
     });
     // Save the user to the database
     if (newUser) {
-      generateToken(newUser, res);
-      await newUser.save();
+      // generateToken(newUser, res);
+      // await newUser.save();
+
+      // persist user first, then generate token with the saved user's _id
+      const savedUser = await newUser.save();
+      generateToken(savedUser._id, res);
 
       res.status(201).json({
         message: "User registered successfully",

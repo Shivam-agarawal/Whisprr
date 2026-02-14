@@ -2,6 +2,12 @@ import jwt from 'jsonwebtoken';
 
 
 export const generateToken = (newUser, res) => {
+
+    const { JWT_SECRET } = process.env;
+    if (!JWT_SECRET) {
+        throw new Error("JWT_SECRET is not defined in environment variables");
+    }
+
     // Generate JWT token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.cookie('jwt', token, {
