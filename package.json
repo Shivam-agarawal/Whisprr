@@ -1,0 +1,21 @@
+{
+  "name": "whisprr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix back-end && npm install --prefix front-end && npm run build --prefix front-end",
+    "start" : "npm start --prefix back-end"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shivam-agarawal/Whisprr.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shivam-agarawal/Whisprr/issues"
+  },
+  "homepage": "https://github.com/Shivam-agarawal/Whisprr#readme"
+}
