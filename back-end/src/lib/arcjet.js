@@ -4,9 +4,6 @@ import arcjet, { shield, detectBot, slidingWindow } from "@arcjet/node";
 
 import { ENV } from "./env.js";
 
-const app = express();
-const port = 3000;
-
 const aj = arcjet({
 
   key: ENV.ARCJET_KEY,
@@ -26,7 +23,7 @@ const aj = arcjet({
       ],
     }),
     // Create a token bucket rate limit. Other algorithms are supported.
-   
+
     slidingWindow({
       mode: "LIVE",//Blocks requests. Use "DRY_RUN" to log only
       max: 100, // Maximum number of requests per interval
