@@ -16,6 +16,7 @@ const __dirname = Path.resolve();
 
 const PORT = process.env.PORT || 3000;
 
+//payload to large error: express.json({ limit: '10mb' })
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cookieParser());
 
