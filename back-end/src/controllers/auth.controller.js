@@ -23,8 +23,17 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "Invalid email format" });
     }
 
-    const user = await User.findOne({ email });
-    if (user) return res.status(400).json({ message: "Email already exists" });
+    // Check for existing email
+    const existingByEmail = await User.findOne({ email });
+    if (existingByEmail) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    // Check for existing username (schema enforces unique username)
+    const existingByUsername = await User.findOne({ username });
+    if (existingByUsername) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -56,6 +65,15 @@ export const signup = async (req, res) => {
     }
   } catch (error) {
     console.log("Error in signup controller:", error);
+
+    // Handle Mongo duplicate key error as a readable 400 instead of 500
+    if (error?.code === 11000) {
+      const duplicatedField = Object.keys(error.keyPattern || {})[0] || "field";
+      return res
+        .status(400)
+        .json({ message: `${duplicatedField.charAt(0).toUpperCase() + duplicatedField.slice(1)} already exists` });
+    }
+
     res.status(500).json({ message: "Internal server error" });
   }
 };
