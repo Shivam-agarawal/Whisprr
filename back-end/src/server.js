@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import { login, signup, logout } from "./controllers/auth.controller.js";
 import Path from "path";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./lib/db.js";
 
@@ -18,6 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 //payload to large error: express.json({ limit: '10mb' })
 app.use(express.json()); // Middleware to parse JSON bodies
+app.use(cors({origin: process.env.CLIENT_URL, credentials: true}))
 app.use(cookieParser());
 
 // Explicit auth routes so /auth/login and /api/auth/login always work
