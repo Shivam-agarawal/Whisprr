@@ -147,6 +147,18 @@ export const useChatStore = create((set, get) => ({
 
       // Add the new message to the chat
       set({ messages: [...get().messages, newMessage] });
+
+      // Play notification sound if sounds are enabled.
+      // IMPORTANT: use get().isSoundEnabled here, NOT a local variable —
+      // this is a socket callback (not a React render), so we must read
+      // the latest state directly from the Zustand store via get().
+      if (get().isSoundEnabled) {
+        const notificationSound = new Audio("/sounds/notification.mp3");
+        notificationSound.currentTime = 0; // reset so rapid messages each play from start
+        notificationSound
+          .play()
+          .catch((e) => console.log("Audio play failed:", e));
+      }
     });
   },
 
