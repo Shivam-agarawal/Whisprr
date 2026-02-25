@@ -17,17 +17,23 @@ import mongoose from 'mongoose';
 
 export const connectDB = async () => {
     try {
-
+        // Read the connection string from the .env file
         const { MONGO_URI } = process.env;
+
+        // If MONGO_URI is not set, throw an error immediately — we can't run without a DB
         if (!MONGO_URI) {
             throw new Error("MONGO_URI is not defined in environment variables");
         }
 
-        const conn = await mongoose.connect(process.env.MONGO_URI)
-        console.log("Connecting to MongoDB... ", conn.connection.host)
-    }
-    catch (error) {
+        // Connect Mongoose to MongoDB using the connection string
+        const conn = await mongoose.connect(process.env.MONGO_URI);
+
+        // Log which host we connected to (useful for debugging env issues)
+        console.log("Connecting to MongoDB... ", conn.connection.host);
+    } catch (error) {
         console.error("Error connecting to MongoDB: ", error);
-        process.exit(1); // 1 status code indicates failure, 0 indicates success
+
+        // Exit with code 1 (failure) — don't let the server run with no database
+        process.exit(1);
     }
-}
+};

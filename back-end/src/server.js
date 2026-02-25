@@ -27,18 +27,29 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./lib/db.js";
 
-dotenv.config();
-const app = express();
+// Import the shared app, server, and socket from socket.js
+// (socket.js creates the http server that socket.io needs)
+import { app, server } from "./lib/socket.js";
 
+// Load environment variables from .env file into process.env
+dotenv.config();
+
+// __dirname doesn't exist in ES Modules — Path.resolve() gives the same result
 const __dirname = Path.resolve();
 
+// Use PORT from .env or default to 3000
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json({ limit: "10mb" })); // Raised limit for base64 image payloads
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }))
+// --- Global Middleware ---
+// Parse incoming JSON bodies (limit raised to 10mb so base64 images fit)
+app.use(express.json({ limit: "10mb" }));
+// Allow requests from the frontend origin and allow cookies to be sent
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+// Parse cookies from incoming requests (needed to read the JWT cookie)
 app.use(cookieParser());
 
-// Explicit auth routes so /auth/login and /api/auth/login always work
+// --- Duplicate routes for compatibility ---
+// These ensure /auth/login and /api/auth/login both work (belt and suspenders)
 app.post("/auth/login", login);
 app.post("/api/auth/login", login);
 app.post("/auth/signup", signup);
@@ -46,34 +57,33 @@ app.post("/api/auth/signup", signup);
 app.post("/auth/logout", logout);
 app.post("/api/auth/logout", logout);
 
-// Other API routes (must be before any catch-all)
-app.use("/api/auth", authRoutes);
-app.use("/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
+// --- Main route groups ---
+app.use("/api/auth", authRoutes);    // all auth endpoints (signup, login, etc.)
+app.use("/auth", authRoutes);        // duplicate mount for compatibility
+app.use("/api/messages", messageRoutes); // all chat/messaging endpoints
 
-// Health check – use GET http://localhost:3000/api/health to verify server
+// Health check — hit GET /api/health to verify the server is up
 app.get("/api/health", (_, res) => res.json({ ok: true, message: "API is running" }));
 
-// make ready for deployment
+// --- Production: serve the built React app ---
 if (process.env.NODE_ENV === "production") {
+  // Serve static files from the Vite build output folder
   app.use(express.static(Path.join(__dirname, "../front-end/dist")));
 
+  // For any route not matched above, send the React index.html
+  // (React Router handles client-side routing from there)
   app.get("*", (_, res) => {
     res.sendFile(Path.join(__dirname, "../front-end/dist/index.html"));
   });
 }
 
-// JSON 404 for API routes (avoids HTML "Cannot POST ..." for wrong paths)
+// Return JSON 404 for unknown /api routes (instead of ugly HTML error pages)
 app.use("/api", (req, res) => {
   res.status(404).json({ error: "Not found", path: req.method + " " + req.path });
 });
 
-app.listen(PORT, () => {
+// Start the HTTP server and connect to MongoDB once it's ready
+server.listen(PORT, () => {
   console.log("Server is running on port: " + PORT);
-  connectDB();
+  connectDB(); // connect to MongoDB after the server starts
 });
-
-// scripts
-// "scripts": {
-//   "start": "node src/server.js"
-// }

@@ -29,32 +29,32 @@ import ContactList from "../components/ContactList";
 import ChatContainer from "../components/ChatContainer";
 import NoConversationPlaceholder from "../components/NoConversationPlaceholder";
 
-/**
- * Render the main chat page layout with a left pane for profile, tab switch and lists, and a right pane for the active conversation or a placeholder.
- *
- * The left pane displays ChatsList when the store's `activeTab` is "chats", otherwise ContactList. The right pane renders ChatContainer when the store's `selectedUser` is set, otherwise NoConversationPlaceholder.
- * @returns {JSX.Element} The chat page React element.
- */
 function ChatPage() {
+  // Read which tab is active and which user (if any) is selected for chatting
   const { activeTab, selectedUser } = useChatStore();
 
   return (
     <div className="relative w-full max-w-6xl h-[800px]">
+      {/* BorderAnimatedContainer wraps everything in the animated glowing border */}
       <BorderAnimatedContainer>
-        {/* LEFT SIDE */}
-        <div className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col">
-          <ProfileHeader />
-          <ActiveTabSwitch />
 
+        {/* LEFT PANEL — sidebar with profile info and user list */}
+        <div className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col">
+          <ProfileHeader />   {/* avatar, username, logout, sound toggle */}
+          <ActiveTabSwitch /> {/* "Chats" | "Contacts" tab buttons */}
+
+          {/* Scrollable list area — shows Chats or Contacts depending on the active tab */}
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
             {activeTab === "chats" ? <ChatsList /> : <ContactList />}
           </div>
         </div>
 
-        {/* RIGHT SIDE */}
+        {/* RIGHT PANEL — chat area (or prompt to select a user) */}
         <div className="flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm">
+          {/* If a user is selected, show the full chat. Otherwise show a "pick someone" prompt */}
           {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
         </div>
+
       </BorderAnimatedContainer>
     </div>
   );

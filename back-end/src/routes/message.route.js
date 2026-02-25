@@ -24,14 +24,16 @@ import { arcjetProtection } from "../middleware/arcjet.middleware.js";
 
 const router = express.Router();
 
-// the middlewares execute in order - so requests get rate-limited first, then authenticated.
-// this is actually more efficient since unauthenticated requests get blocked by 
-// rate limiting before hitting the auth middleware.
+// Apply BOTH middlewares to every route in this file:
+// 1. arcjetProtection — rejects bots and rate-limits excessive requests
+// 2. protectRoute     — verifies the JWT cookie and attaches req.user
+// Order matters: security check runs first so unauthenticated requests
+// are blocked early, before any database work is done.
 router.use(arcjetProtection, protectRoute);
 
-router.get("/contacts", getAllContacts);
-router.get("/chats", getChatPartners);
-router.get("/:id", getMessagesByUserId);
-router.post("/send/:id", sendMessage);
+router.get("/contacts", getAllContacts);       // all users (for Contacts tab)
+router.get("/chats", getChatPartners);         // chat history partners (for Chats tab)
+router.get("/:id", getMessagesByUserId);       // messages with a specific user
+router.post("/send/:id", sendMessage);         // send a message to a specific user
 
 export default router;

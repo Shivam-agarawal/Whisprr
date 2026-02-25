@@ -3,44 +3,25 @@
  *
  * Rendered in the left sidebar when the "Contacts" tab is active. Shows
  * every registered user except the currently logged-in user.
- *
- * Data: Calls getAllContacts() on mount to fetch the full user list
- * from GET /api/messages/contacts.
- *
- * States:
- *  Loading → <UsersLoadingSkeleton> (pulsing placeholder rows)
- *  Loaded  → Scrollable list of clickable user rows:
- *              - Avatar with online/offline indicator (from onlineUsers in store).
- *              - Username.
- *            Clicking a row calls setSelectedUser(contact) to open a chat
- *            (even if no messages exist yet — shows NoChatHistoryPlaceholder).
- *
- * Note: Profile picture field on contact objects is `profilePicture`.
  */
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 
-/**
- * Render a list of chat contacts with avatar, online/offline indicator, and click-to-select behavior.
- *
- * Renders a loading skeleton while contacts are being fetched. When loaded, displays each contact's
- * avatar (fallback to "/avatar.png"), username, and an "online" indicator if the contact's `_id`
- * appears in the auth store's `onlineUsers`. Clicking a contact calls the chat store's `setSelectedUser`
- * with that contact.
- *
- * @returns {JSX.Element} A JSX element containing either the loading skeleton or the contact list.
- */
 function ContactList() {
   const { getAllContacts, allContacts, setSelectedUser, isUsersLoading } =
     useChatStore();
+
+  // List of currently online user IDs (from socket.io getOnlineUsers event)
   const { onlineUsers } = useAuthStore();
 
+  // Fetch all contacts when the component first mounts
   useEffect(() => {
     getAllContacts();
   }, [getAllContacts]);
 
+  // Show skeleton placeholders while data is loading
   if (isUsersLoading) return <UsersLoadingSkeleton />;
 
   return (
@@ -52,13 +33,22 @@ function ContactList() {
           onClick={() => setSelectedUser(contact)}
         >
           <div className="flex items-center gap-3">
-            <div
-              className={`avatar ${onlineUsers.includes(contact._id) ? "online" : "offline"}`}
-            >
-              <div className="size-12 rounded-full">
-                <img src={contact.profilePicture || "/avatar.png"} />
+            {/* Avatar wrapper — position:relative so the green dot can sit on top */}
+            <div className="relative flex-shrink-0">
+              <div className="size-12 rounded-full overflow-hidden">
+                <img
+                  src={contact.profilePicture || "/avatar.png"}
+                  alt={contact.username}
+                  className="size-full object-cover"
+                />
               </div>
+              {/* Green dot — only shown when the user is online */}
+              {onlineUsers.includes(contact._id) && (
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-800" />
+              )}
             </div>
+
+            {/* Contact's username */}
             <h4 className="text-slate-200 font-medium">{contact.username}</h4>
           </div>
         </div>

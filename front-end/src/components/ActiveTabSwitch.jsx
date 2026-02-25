@@ -15,31 +15,29 @@
  */
 import { useChatStore } from "../store/useChatStore";
 
-/**
- * Renders a two-option tab switch ("Chats" and "Contacts") that updates the chat store's active tab when clicked.
- *
- * @returns {JSX.Element} A horizontal tab bar containing buttons to select the active chat view.
- */
 function ActiveTabSwitch() {
+  // Get the current active tab and the function to change it
   const { activeTab, setActiveTab } = useChatStore();
 
   return (
     <div className="tabs tabs-boxed bg-transparent p-2 m-2">
+      {/* "Chats" tab button */}
       <button
-        onClick={() => setActiveTab("chats")}
+        onClick={() => setActiveTab("chats")} // switch to Chats tab
         className={`tab ${activeTab === "chats"
-            ? "bg-cyan-500/20 text-cyan-400"
-            : "text-slate-400"
+          ? "bg-cyan-500/20 text-cyan-400" // highlighted style when active
+          : "text-slate-400"               // default style when inactive
           }`}
       >
         Chats
       </button>
 
+      {/* "Contacts" tab button */}
       <button
-        onClick={() => setActiveTab("contacts")}
+        onClick={() => setActiveTab("contacts")} // switch to Contacts tab
         className={`tab ${activeTab === "contacts"
-            ? "bg-cyan-500/20 text-cyan-400"
-            : "text-slate-400"
+          ? "bg-cyan-500/20 text-cyan-400" // highlighted style when active
+          : "text-slate-400"               // default style when inactive
           }`}
       >
         Contacts

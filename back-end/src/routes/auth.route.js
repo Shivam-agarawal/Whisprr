@@ -24,16 +24,23 @@ import {
 import { protectRoute } from "../middleware/auth.middleware.js";
 import { arcjetProtection } from "../middleware/arcjet.middleware.js";
 
+// express.Router() creates a mini-router just for /api/auth routes
 const router = express.Router();
 
+// Apply Arcjet security to ALL routes in this router (rate limiting + bot/attack protection)
 router.use(arcjetProtection);
 
-router.post("/signup", signup);
-router.post("/login", login);
-router.post("/logout", logout);
+// --- Public routes — no login required ---
+router.post("/signup", signup);    // create a new account
+router.post("/login", login);      // log in with email + password
+router.post("/logout", logout);    // clear the JWT cookie
 
-router.put("/update-profile", protectRoute, updateProfile);
+// --- Protected routes — must be logged in (JWT cookie required) ---
+// protectRoute middleware runs first; if it fails, the handler never runs
+router.put("/update-profile", protectRoute, updateProfile); // upload a new profile picture
 
+// /check is called by the frontend on every page load to restore the session
+// protectRoute verifies the cookie; if valid it sets req.user and we return it
 router.get("/check", protectRoute, (req, res) =>
   res.status(200).json(req.user),
 );
