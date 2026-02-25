@@ -1,3 +1,10 @@
+/**
+ * Renders a loading skeleton for a chat thread using six pulsing placeholder bubbles.
+ *
+ * Produces a centered container with six chat items that alternate alignment (left/right),
+ * each shown as a small animated pulsing bubble.
+ * @returns {JSX.Element} A JSX element containing six animated placeholder chat bubbles.
+ */
 function MessagesLoadingSkeleton() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">

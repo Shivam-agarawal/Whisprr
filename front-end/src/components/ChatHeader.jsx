@@ -3,6 +3,13 @@ import { useChatStore } from "../store/useChatStore";
 import { useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 
+/**
+ * Render the header for the currently selected chat user, showing their avatar, display name, and online/offline status.
+ *
+ * Pressing the Escape key or clicking the close button clears the selected user.
+ *
+ * @returns {JSX.Element} The chat header element.
+ */
 function ChatHeader() {
   const { selectedUser, setSelectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();

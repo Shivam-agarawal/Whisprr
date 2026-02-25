@@ -6,6 +6,16 @@ import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
 import MessageInput from "./MessageInput";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 
+/**
+ * Render the chat UI for the currently selected conversation.
+ *
+ * Fetches messages for the selected user and subscribes to live updates (cleanup on unmount or user change),
+ * automatically scrolls to the latest message when messages change, and renders the chat header, a message list
+ * with sender-aligned bubbles (optional image, text, and timestamp), a loading skeleton while messages load,
+ * an empty-state placeholder when there is no history, and the message input.
+ *
+ * @returns A React element containing the chat header, message list (or loading/empty state), and message input.
+ */
 function ChatContainer() {
   const {
     selectedUser,

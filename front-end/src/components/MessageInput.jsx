@@ -4,6 +4,10 @@ import { useChatStore } from "../store/useChatStore";
 import toast from "react-hot-toast";
 import { ImageIcon, SendIcon, XIcon } from "lucide-react";
 
+/**
+ * Renders a chat message composer with text input, optional image attachment and preview, and send controls.
+ * @returns {JSX.Element} The message input UI that lets the user type a message, attach or remove an image preview, and send the message.
+ */
 function MessageInput() {
   const { playRandomKeyStrokeSound } = useKeyboardSound();
   const [text, setText] = useState("");

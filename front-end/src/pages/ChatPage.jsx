@@ -8,6 +8,12 @@ import ContactList from "../components/ContactList";
 import ChatContainer from "../components/ChatContainer";
 import NoConversationPlaceholder from "../components/NoConversationPlaceholder";
 
+/**
+ * Render the chat page layout with a left panel for profile, tab switch and lists, and a right panel for the active conversation area.
+ *
+ * The left panel displays ChatsList when the active tab is "chats" and ContactList otherwise. The right panel displays ChatContainer when a user is selected and NoConversationPlaceholder when no conversation is selected.
+ * @returns {JSX.Element} The chat page UI.
+ */
 function ChatPage() {
   const { activeTab, selectedUser } = useChatStore();
 
