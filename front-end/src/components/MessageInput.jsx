@@ -1,3 +1,23 @@
+/**
+ * MessageInput.jsx — Chat Message Compose & Send Area
+ *
+ * The input bar at the bottom of the chat (inside ChatContainer). Lets the
+ * user compose and send text messages and/or image attachments.
+ *
+ * Features:
+ *  Text input    — Controlled input; plays a random keystroke sound on each
+ *                  character when isSoundEnabled is true.
+ *  Image picker  — Hidden file input triggered by the image icon button.
+ *                  Accepts image/* files only (shows a toast error otherwise).
+ *                  Selected image is read as a base64 DataURL and shown as a
+ *                  thumbnail preview. A remove (×) button discards the image.
+ *  Send button   — Disabled when both text and image are empty. On submit,
+ *                  calls useChatStore.sendMessage({ text, image }).
+ *                  The backend uploads base64 images to Cloudinary.
+ *
+ * Note: The body size limit on the backend is 10MB to accommodate base64 images.
+ *       Very large images (>7MB) may still time out — consider resizing on client.
+ */
 import { useRef, useState } from "react";
 import useKeyboardSound from "../hooks/useKeyboardSound";
 import { useChatStore } from "../store/useChatStore";
@@ -102,9 +122,8 @@ function MessageInput() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className={`bg-slate-800/50 text-slate-400 hover:text-slate-200 rounded-lg px-4 transition-colors ${
-            imagePreview ? "text-cyan-500" : ""
-          }`}
+          className={`bg-slate-800/50 text-slate-400 hover:text-slate-200 rounded-lg px-4 transition-colors ${imagePreview ? "text-cyan-500" : ""
+            }`}
         >
           <ImageIcon className="w-5 h-5" />
         </button>

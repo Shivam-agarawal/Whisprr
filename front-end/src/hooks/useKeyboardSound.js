@@ -1,3 +1,22 @@
+/**
+ * useKeyboardSound.js — Keyboard Sound Effect Hook
+ *
+ * A custom React hook that provides a function to play a random keystroke
+ * sound effect. Used in MessageInput to give tactile audio feedback while
+ * the user types, when sound is enabled in useChatStore.
+ *
+ * Sound Pool:
+ *  Four distinct keystroke audio files (keystroke1–4.mp3) are pre-loaded
+ *  at module level so they are ready to play instantly without delay.
+ *  Each call picks one at random, resets it to time 0 (so rapid triggers
+ *  don't queue up), and plays it. Errors (e.g. browser autoplay block) are
+ *  caught and logged silently.
+ *
+ * Returns:
+ *  { playRandomKeyStrokeSound } — call this function on each keypress event.
+ *
+ * Audio Files Expected In: /public/sounds/keystroke1.mp3 … keystroke4.mp3
+ */
 // audio setup
 const keyStrokeSounds = [
   new Audio("/sounds/keystroke1.mp3"),

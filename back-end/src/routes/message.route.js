@@ -1,3 +1,17 @@
+/**
+ * message.route.js — Messaging Routes
+ *
+ * Mounts all chat and contact-related HTTP routes under /api/messages.
+ * All routes are protected by both arcjetProtection (security/rate limiting)
+ * and protectRoute (JWT authentication) — applied in that order for efficiency
+ * (unauthenticated requests are rejected before hitting the DB).
+ *
+ * Routes:
+ *  GET  /api/messages/contacts  → getAllContacts  (all users except self)
+ *  GET  /api/messages/chats     → getChatPartners (users you've chatted with)
+ *  GET  /api/messages/:id       → getMessagesByUserId (full message history)
+ *  POST /api/messages/send/:id  → sendMessage (text and/or image)
+ */
 import express from "express";
 import {
   getAllContacts,

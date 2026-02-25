@@ -1,4 +1,21 @@
-//const express = require('express');
+/**
+ * server.js — Express Application Entry Point
+ *
+ * This is the main backend server file for the Whisprr chat application.
+ * It sets up the Express app with all middleware and routes, then starts
+ * listening on the configured port.
+ *
+ * Responsibilities:
+ *  - Registers global middleware: JSON body parser (10mb limit for base64 images),
+ *    CORS (configured to allow the frontend origin with credentials), and cookie parser.
+ *  - Mounts route groups: /api/auth for authentication, /api/messages for chat.
+ *  - Serves the built React frontend in production mode (static files + SPA fallback).
+ *  - Connects to MongoDB via connectDB() after the server starts listening.
+ *
+ * Environment Variables Required:
+ *  PORT, MONGO_URI, CLIENT_URL, NODE_ENV
+ */
+// Note: This file uses ES Modules (import/export), not CommonJS (require)
 
 import express from "express";
 import dotenv from "dotenv";
@@ -17,9 +34,8 @@ const __dirname = Path.resolve();
 
 const PORT = process.env.PORT || 3000;
 
-//payload to large error: express.json({ limit: '10mb' })
-app.use(express.json()); // Middleware to parse JSON bodies
-app.use(cors({origin: process.env.CLIENT_URL, credentials: true}))
+app.use(express.json({ limit: "10mb" })); // Raised limit for base64 image payloads
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }))
 app.use(cookieParser());
 
 // Explicit auth routes so /auth/login and /api/auth/login always work

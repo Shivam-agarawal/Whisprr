@@ -1,3 +1,26 @@
+/**
+ * ChatContainer.jsx — Main Chat Conversation Area (Right Panel)
+ *
+ * Renders the full conversation view for the currently selected user.
+ * Placed in the right panel of ChatPage when selectedUser is not null.
+ *
+ * Structure (top to bottom):
+ *  <ChatHeader>               — Shows the other user's avatar, name, online status.
+ *  Scrollable message list    — Maps over `messages` from the store. Each message
+ *                               is aligned right if sent by authUser, left otherwise.
+ *                               Supports both text and image content.
+ *                               Auto-scrolls to the latest message on update.
+ *  <MessagesLoadingSkeleton>  — Shown while messages are being fetched.
+ *  <NoChatHistoryPlaceholder> — Shown when the message list is empty. Provides
+ *                               quick-send buttons ("Say Hello", etc.) that call
+ *                               sendMessage() directly on click.
+ *  <MessageInput>             — Text input, image picker, and send button.
+ *
+ * Side effects (useEffect):
+ *  - Fetches messages for the selected user on mount / when selectedUser changes.
+ *  - Subscribes to live message updates (socket.io stub) and unsubscribes on unmount.
+ *  - Auto-scrolls to the bottom ref element whenever `messages` array changes.
+ */
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
@@ -23,6 +46,7 @@ function ChatContainer() {
     isMessagesLoading,
     subscribeToMessages,
     unsubscribeFromMessages,
+    sendMessage,
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
@@ -58,11 +82,10 @@ function ChatContainer() {
                 className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
               >
                 <div
-                  className={`chat-bubble relative ${
-                    msg.senderId === authUser._id
-                      ? "bg-cyan-600 text-white"
-                      : "bg-slate-800 text-slate-200"
-                  }`}
+                  className={`chat-bubble relative ${msg.senderId === authUser._id
+                    ? "bg-cyan-600 text-white"
+                    : "bg-slate-800 text-slate-200"
+                    }`}
                 >
                   {msg.image && (
                     <img
@@ -87,7 +110,10 @@ function ChatContainer() {
         ) : isMessagesLoading ? (
           <MessagesLoadingSkeleton />
         ) : (
-          <NoChatHistoryPlaceholder name={selectedUser.username || selectedUser.fullName} />
+          <NoChatHistoryPlaceholder
+            name={selectedUser.username || selectedUser.fullName}
+            onQuickMessage={(text) => sendMessage({ text, image: null })}
+          />
         )}
       </div>
 

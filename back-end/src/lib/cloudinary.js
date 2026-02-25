@@ -1,3 +1,24 @@
+/**
+ * cloudinary.js — Cloudinary SDK Configuration
+ *
+ * Configures and exports the Cloudinary client used for uploading images.
+ * Both profile pictures (/api/auth/update-profile) and chat images
+ * (/api/messages/send/:id) are uploaded here before the resulting CDN URL
+ * is stored in MongoDB.
+ *
+ * Configuration:
+ *  Reads CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET
+ *  from environment variables. The `cloudinary.config()` call is guarded so
+ *  the app won't crash at startup if the keys are missing — uploads will simply
+ *  fail at runtime.
+ *
+ * Usage in controllers:
+ *  const uploadResponse = await cloudinary.uploader.upload(base64String);
+ *  const imageUrl = uploadResponse.secure_url;
+ *
+ * Environment Variables Required:
+ *  CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+ */
 // Package is CJS; use default import (v2 is the main API in this version)
 import cloudinary from "cloudinary";
 import { ENV } from "./env.js";

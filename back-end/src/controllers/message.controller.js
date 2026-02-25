@@ -1,3 +1,32 @@
+/**
+ * message.controller.js — Messaging & Contacts Controller
+ *
+ * Handles all HTTP logic for chat-related endpoints. All routes require
+ * the user to be authenticated (protectRoute middleware).
+ *
+ *  getAllContacts     GET /api/messages/contacts
+ *                    Returns every registered user except the logged-in user.
+ *                    Used to populate the "Contacts" tab in the sidebar.
+ *
+ *  getChatPartners   GET /api/messages/chats
+ *                    Finds all messages involving the logged-in user and returns
+ *                    the unique set of users they have exchanged messages with.
+ *                    Used to populate the "Chats" tab in the sidebar.
+ *
+ *  getMessagesByUserId  GET /api/messages/:id
+ *                    Returns the full message history between the logged-in user
+ *                    and the user specified by :id (both directions).
+ *
+ *  sendMessage       POST /api/messages/send/:id
+ *                    Validates the payload (text or image required, can't message
+ *                    yourself). If an image is included (base64), uploads it to
+ *                    Cloudinary and stores the secure URL. Saves the Message doc.
+ *                    Real-time delivery via socket.io is currently commented out
+ *                    (see TODO comments).
+ *
+ * Note: socket.io real-time events (newMessage emit) are prepared but currently
+ * commented out pending full socket.io integration.
+ */
 import cloudinary from "../lib/cloudinary.js";
 //import { getReceiverSocketId, io } from "../lib/socket.js";
 import Message from "../models/message.js";

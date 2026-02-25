@@ -1,4 +1,23 @@
-
+/**
+ * arcjet.js — Arcjet Security Client Configuration
+ *
+ * Creates and exports a pre-configured Arcjet security client (`aj`) used by
+ * the arcjet.middleware.js to protect all API routes.
+ *
+ * Active Rules:
+ *  1. Shield (LIVE)       — Blocks common web attack vectors: SQL injection,
+ *                           XSS, path traversal, etc.
+ *  2. detectBot (LIVE)    — Blocks automated bots. Search engine crawlers
+ *                           (Google, Bing) are explicitly allowed.
+ *  3. slidingWindow (LIVE)— Rate limiting: max 100 requests per 60 seconds
+ *                           per IP (sliding window algorithm).
+ *
+ * To test without blocking traffic, switch mode from "LIVE" to "DRY_RUN"
+ * in each rule — requests will be logged but not rejected.
+ *
+ * Environment Variables Required:
+ *  ARCJET_KEY — your Arcjet project API key.
+ */
 
 import arcjet, { shield, detectBot, slidingWindow } from "@arcjet/node";
 

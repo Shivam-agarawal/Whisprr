@@ -1,3 +1,21 @@
+/**
+ * ChatsList.jsx — Recent Conversations Sidebar List
+ *
+ * Rendered in the left sidebar when the "Chats" tab is active. Shows a list
+ * of all users the logged-in user has previously exchanged messages with.
+ *
+ * Data: Calls getMyChatPartners() on mount to fetch the list. The backend
+ * derives this by finding all messages involving the current user and
+ * returning the unique set of the other party in each conversation.
+ *
+ * States:
+ *  Loading  → <UsersLoadingSkeleton> (pulsing placeholder rows)
+ *  Empty    → <NoChatsFound> (prompt to go to Contacts tab)
+ *  Loaded   → Scrollable list of clickable user rows:
+ *               - Avatar with online/offline indicator.
+ *               - Username.
+ *             Clicking a row calls setSelectedUser(chat) to open the chat.
+ */
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton";

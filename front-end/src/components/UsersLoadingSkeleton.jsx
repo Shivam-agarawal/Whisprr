@@ -1,4 +1,16 @@
 /**
+ * UsersLoadingSkeleton.jsx — Contact/Chat List Loading Skeleton
+ *
+ * Shown in the sidebar (inside ChatsList and ContactList) while user data
+ * is being fetched from the server (isUsersLoading is true in useChatStore).
+ *
+ * Renders 3 pulsing placeholder rows, each containing:
+ *  - A circular avatar placeholder (w-12 h-12).
+ *  - Two line placeholders of different widths (mimicking a name + status).
+ *
+ * No props. No state. Purely presentational.
+ */
+/**
  * Renders a vertical stack of three skeleton placeholders representing loading user entries.
  *
  * @returns {JSX.Element} A container element with three skeleton blocks, each containing an avatar placeholder and two line placeholders.

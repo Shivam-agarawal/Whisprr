@@ -1,3 +1,28 @@
+/**
+ * auth.controller.js — Authentication Controller
+ *
+ * Handles all HTTP logic for user authentication endpoints:
+ *
+ *  signup      POST /api/auth/signup
+ *              Validates input, checks for duplicate email/username, hashes
+ *              the password with bcrypt, saves the new User, issues a JWT
+ *              cookie via generateToken(), and sends a welcome email (Resend).
+ *
+ *  login       POST /api/auth/login
+ *              Looks up the user by email, compares the password hash, issues
+ *              a JWT cookie, and returns the public user fields.
+ *
+ *  logout      POST /api/auth/logout
+ *              Clears the JWT cookie by setting its maxAge to 0.
+ *
+ *  updateProfile  PUT /api/auth/update-profile  (protected)
+ *              Accepts a base64 image in req.body.profilePicture, uploads it
+ *              to Cloudinary, and stores the resulting secure URL in the DB.
+ *              Returns the updated user document (password excluded).
+ *
+ * All protected routes require the protectRoute middleware to run first,
+ * which verifies the JWT and attaches req.user.
+ */
 import { sendWelcomeEmail } from "../emails/email.Handlers.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
@@ -114,22 +139,25 @@ export const logout = (_, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { profilePic } = req.body;
-    if (!profilePic) return res.status(400).json({ message: "Profile pic is required" });
+    const { profilePicture } = req.body;
+    if (!profilePicture) return res.status(400).json({ message: "Profile pic is required" });
 
     const userId = req.user._id;
+    console.log("[updateProfile] Uploading to Cloudinary for user:", userId);
 
-    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+    const uploadResponse = await cloudinary.uploader.upload(profilePicture);
+    console.log("[updateProfile] Cloudinary upload success, URL:", uploadResponse.secure_url);
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { profilePicture: uploadResponse.secure_url },
       { new: true }
-    );
+    ).select("-password");
+    console.log("[updateProfile] DB updated, profilePicture saved:", updatedUser.profilePicture);
 
     res.status(200).json(updatedUser);
   } catch (error) {
-    console.log("Error in update profile:", error);
+    console.log("[updateProfile] Error:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -1,3 +1,13 @@
+/**
+ * NoConversationPlaceholder.jsx — No Selected Conversation Placeholder
+ *
+ * Displayed in the right panel of ChatPage when no contact/chat has been
+ * selected yet (selectedUser is null in useChatStore).
+ *
+ * Shows a centered icon, "Select a conversation" heading, and a short
+ * instructional subtitle. No interactivity — purely informational.
+ * Disappears as soon as the user clicks a contact/chat row.
+ */
 import { MessageCircleIcon } from "lucide-react";
 
 const NoConversationPlaceholder = () => {

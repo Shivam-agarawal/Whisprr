@@ -1,3 +1,15 @@
+/**
+ * NoChatsFound.jsx — Empty Chats Tab Placeholder
+ *
+ * Shown in the sidebar when the "Chats" tab is active but the user has
+ * no existing conversations (i.e. the chats array from useChatStore is empty).
+ *
+ * Displays:
+ *  - An icon and "No conversations yet" heading.
+ *  - A short instruction message.
+ *  - A "Find contacts" button that switches the active tab to "contacts"
+ *    via setActiveTab("contacts"), guiding the user to start their first chat.
+ */
 import { MessageCircleIcon } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
 

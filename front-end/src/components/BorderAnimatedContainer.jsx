@@ -1,3 +1,21 @@
+/**
+ * BorderAnimatedContainer.jsx — Animated Gradient Border Wrapper
+ *
+ * A purely visual wrapper component that renders its children inside a
+ * container with a continuously rotating conic-gradient border animation.
+ * Used as the outer shell for the LoginPage, SignUpPage, and ChatPage.
+ *
+ * How the animation works:
+ *  A CSS custom property `--border-angle` is incremented by the `animate-border`
+ *  Tailwind animation (defined in tailwind config / index.css). The container uses
+ *  a two-layer background: a dark fill as the padding-box and the conic gradient
+ *  as the border-box, creating the illusion of an animated glowing border.
+ *
+ * Reference: https://cruip-tutorials.vercel.app/animated-gradient-border/
+ *
+ * Props:
+ *  children — any React nodes to render inside the animated border container.
+ */
 // How to make animated gradient border 👇
 // https://cruip-tutorials.vercel.app/animated-gradient-border/
 function BorderAnimatedContainer({ children }) {

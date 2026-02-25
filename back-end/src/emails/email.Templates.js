@@ -1,3 +1,20 @@
+/**
+ * email.Templates.js — HTML Email Templates
+ *
+ * Contains pure functions that return fully-rendered HTML email strings.
+ * These templates are passed directly to the Resend `html` field.
+ * Keeping templates separate from handlers makes them easy to edit and preview.
+ *
+ * Exported Functions:
+ *  createWelcomeEmailTemplate(name, clientURL)
+ *    — Returns an inline-styled HTML string for the welcome email.
+ *    — Includes: branded header, personalised greeting, a 3-step get-started
+ *      guide, a CTA button linking to clientURL, and a footer with legal links.
+ *    — Uses template literals so `name` and `clientURL` are injected directly.
+ *
+ * Styling: All CSS is inline (required for email client compatibility).
+ * Colours: #36D1DC (cyan) / #5B86E5 (indigo) — matching the Whisprr brand.
+ */
 export function createWelcomeEmailTemplate(name, clientURL) {
   return `
   <!DOCTYPE html>
