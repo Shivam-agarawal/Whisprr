@@ -23,12 +23,15 @@
 import cloudinary from "cloudinary";
 import { ENV } from "./env.js";
 
+// Only configure Cloudinary if all three keys are present in .env
+// This prevents a crash at startup if you haven't set up Cloudinary yet
 if (ENV.CLOUDINARY_CLOUD_NAME && ENV.CLOUDINARY_API_KEY && ENV.CLOUDINARY_API_SECRET) {
   cloudinary.config({
-    cloud_name: ENV.CLOUDINARY_CLOUD_NAME,
-    api_key: ENV.CLOUDINARY_API_KEY,
-    api_secret: ENV.CLOUDINARY_API_SECRET,
+    cloud_name: ENV.CLOUDINARY_CLOUD_NAME, // your Cloudinary account name
+    api_key: ENV.CLOUDINARY_API_KEY,       // your Cloudinary API key
+    api_secret: ENV.CLOUDINARY_API_SECRET, // your Cloudinary API secret (keep this private!)
   });
 }
 
+// Export the configured client — controllers import this to upload images
 export default cloudinary;

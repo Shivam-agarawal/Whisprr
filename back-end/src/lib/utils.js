@@ -18,21 +18,27 @@
  */
 import jwt from 'jsonwebtoken';
 
+// Creates a signed JWT and stores it in an httpOnly cookie on the response
+// Called as: generateToken(user._id, res) — passes the ObjectId directly
+export const generateToken = (userId, res) => {
 
-export const generateToken = (newUser, res) => {
-
+    // Read the secret key from environment variables
     const { JWT_SECRET } = process.env;
     if (!JWT_SECRET) {
         throw new Error("JWT_SECRET is not defined in environment variables");
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    // Sign the token — payload is { id: userId }, expires in 7 days
+    // userId is a Mongoose ObjectId — jwt.sign serializes it to a hex string automatically
+    const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    // Attach the token to the response as an httpOnly cookie named "jwt"
     res.cookie('jwt', token, {
-        httpOnly: true, // Cookie is only accessible by the server // Helps prevent XSS attacks //cross-site scripting attacks
-        sameSite: 'strict', // Cookie is only sent in a first-party context // Helps prevent CSRF attacks //cross-site request forgery attacks
-        secure: process.env.NODE_ENV === 'production' ? true : false, // Cookie is only sent over HTTPS in production // Helps ensure secure transmission of the token // In development, it can be sent over HTTP for easier testing
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds
+        httpOnly: true,  // JavaScript can't read this cookie → protects against XSS attacks
+        sameSite: 'strict', // cookie only sent on same-site requests → protects against CSRF
+        secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds (matches token expiry)
     });
-    return token;
+
+    return token; // return the raw token (not usually needed, cookie is enough)
 };

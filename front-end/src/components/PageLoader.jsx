@@ -11,9 +11,12 @@
  * Uses the Lucide `LoaderIcon` with a Tailwind `animate-spin` class.
  */
 import { LoaderIcon } from "lucide-react";
+
 function PageLoader() {
   return (
+    // Full-screen centered layout so the spinner appears in the middle of the screen
     <div className="flex items-center justify-center h-screen">
+      {/* animate-spin makes the icon rotate continuously */}
       <LoaderIcon className="size-10 animate-spin" />
     </div>
   );

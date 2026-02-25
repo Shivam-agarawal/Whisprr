@@ -11,15 +11,13 @@
  *                               Supports both text and image content.
  *                               Auto-scrolls to the latest message on update.
  *  <MessagesLoadingSkeleton>  — Shown while messages are being fetched.
- *  <NoChatHistoryPlaceholder> — Shown when the message list is empty. Provides
- *                               quick-send buttons ("Say Hello", etc.) that call
- *                               sendMessage() directly on click.
+ *  <NoChatHistoryPlaceholder> — Shown when the message list is empty.
  *  <MessageInput>             — Text input, image picker, and send button.
  *
  * Side effects (useEffect):
  *  - Fetches messages for the selected user on mount / when selectedUser changes.
- *  - Subscribes to live message updates (socket.io stub) and unsubscribes on unmount.
- *  - Auto-scrolls to the bottom ref element whenever `messages` array changes.
+ *  - Subscribes to live socket messages and unsubscribes on unmount.
+ *  - Auto-scrolls to the bottom whenever the messages array changes.
  */
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "../store/useAuthStore";
@@ -29,16 +27,8 @@ import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
 import MessageInput from "./MessageInput";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 
-/**
- * Render the main chat interface for the selected conversation.
- *
- * Loads messages for the selected user, subscribes to live message updates (and unsubscribes on cleanup),
- * and auto-scrolls to the latest message when messages change.
- *
- * @returns {JSX.Element} A React element containing the chat header, a scrollable message list (with per-message alignment, timestamps, and optional images),
- * a loading skeleton while messages load, a placeholder when there is no history, and the message input area.
- */
 function ChatContainer() {
+  // Read everything we need from the chat store
   const {
     selectedUser,
     getMessagesByUserId,
@@ -48,14 +38,19 @@ function ChatContainer() {
     unsubscribeFromMessages,
     sendMessage,
   } = useChatStore();
-  const { authUser } = useAuthStore();
+
+  const { authUser } = useAuthStore(); // the logged-in user (for message alignment)
+
+  // This ref points to an invisible <div> at the bottom of the message list.
+  // We scroll to it whenever new messages arrive.
   const messageEndRef = useRef(null);
 
+  // Effect 1: Load messages and subscribe to real-time updates when the selected user changes
   useEffect(() => {
-    getMessagesByUserId(selectedUser._id);
-    subscribeToMessages();
+    getMessagesByUserId(selectedUser._id); // fetch message history from the server
+    subscribeToMessages();                  // start listening for new socket.io messages
 
-    // clean up
+    // Cleanup: stop listening when the component unmounts or the selected user changes
     return () => unsubscribeFromMessages();
   }, [
     selectedUser,
@@ -64,6 +59,7 @@ function ChatContainer() {
     unsubscribeFromMessages,
   ]);
 
+  // Effect 2: Scroll to the newest message every time the messages list updates
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -72,21 +68,27 @@ function ChatContainer() {
 
   return (
     <>
+      {/* Top bar: other user's avatar, name, online status, close button */}
       <ChatHeader />
+
+      {/* Scrollable message area */}
       <div className="flex-1 px-6 overflow-y-auto py-8">
         {messages.length > 0 && !isMessagesLoading ? (
+          // --- Show messages ---
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg) => (
               <div
                 key={msg._id}
+                // chat-end = my messages (right side), chat-start = their messages (left side)
                 className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
               >
                 <div
                   className={`chat-bubble relative ${msg.senderId === authUser._id
-                    ? "bg-cyan-600 text-white"
-                    : "bg-slate-800 text-slate-200"
+                    ? "bg-cyan-600 text-white"    // my messages: cyan
+                    : "bg-slate-800 text-slate-200" // their messages: dark grey
                     }`}
                 >
+                  {/* If the message has an image, show it */}
                   {msg.image && (
                     <img
                       src={msg.image}
@@ -94,7 +96,9 @@ function ChatContainer() {
                       className="rounded-lg h-48 object-cover"
                     />
                   )}
+                  {/* If the message has text, show it */}
                   {msg.text && <p className="mt-2">{msg.text}</p>}
+                  {/* Timestamp (e.g. "02:30 PM") */}
                   <p className="text-xs mt-1 opacity-75 flex items-center gap-1">
                     {new Date(msg.createdAt).toLocaleTimeString(undefined, {
                       hour: "2-digit",
@@ -104,19 +108,23 @@ function ChatContainer() {
                 </div>
               </div>
             ))}
-            {/* 👇 scroll target */}
+            {/* Invisible scroll target — scrollIntoView() brings us here */}
             <div ref={messageEndRef} />
           </div>
         ) : isMessagesLoading ? (
+          // --- Show skeleton while loading ---
           <MessagesLoadingSkeleton />
         ) : (
+          // --- Show placeholder if no messages yet ---
           <NoChatHistoryPlaceholder
             name={selectedUser.username || selectedUser.fullName}
+            // quick-send buttons call sendMessage directly with predefined text
             onQuickMessage={(text) => sendMessage({ text, image: null })}
           />
         )}
       </div>
 
+      {/* Message compose bar at the bottom */}
       <MessageInput />
     </>
   );

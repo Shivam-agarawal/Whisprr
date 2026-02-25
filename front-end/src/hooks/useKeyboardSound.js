@@ -17,7 +17,10 @@
  *
  * Audio Files Expected In: /public/sounds/keystroke1.mp3 … keystroke4.mp3
  */
-// audio setup
+
+// Load all keystroke sounds once at module level (not inside the function).
+// This way the audio objects are reused every keystroke instead of being
+// recreated, which would cause a small delay before each sound.
 const keyStrokeSounds = [
   new Audio("/sounds/keystroke1.mp3"),
   new Audio("/sounds/keystroke2.mp3"),
@@ -25,22 +28,24 @@ const keyStrokeSounds = [
   new Audio("/sounds/keystroke4.mp3"),
 ];
 
-/**
- * Provides a handler to play a random keystroke sound from the module's sound pool.
- *
- * @returns {{ playRandomKeyStrokeSound: function }} An object exposing `playRandomKeyStrokeSound`, a function that resets and plays a randomly selected keystroke audio and logs playback errors. 
- */
 function useKeyboardSound() {
   const playRandomKeyStrokeSound = () => {
+    // Pick a random sound from the pool
     const randomSound =
       keyStrokeSounds[Math.floor(Math.random() * keyStrokeSounds.length)];
 
-    randomSound.currentTime = 0; // this is for a better UX, def add this
+    // Reset to the beginning — without this, holding a key would play nothing
+    // because the audio would still be at the end from the previous press
+    randomSound.currentTime = 0;
+
+    // Play the sound — .play() returns a Promise so we catch errors
+    // (browsers can block audio if the user hasn't interacted with the page yet)
     randomSound
       .play()
       .catch((error) => console.log("Audio play failed:", error));
   };
 
+  // Expose only the play function — the sounds array is internal
   return { playRandomKeyStrokeSound };
 }
 

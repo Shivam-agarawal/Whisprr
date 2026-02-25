@@ -10,12 +10,16 @@
  */
 import { MessageCircleIcon } from "lucide-react";
 
+// This is a simple, static component — no props, no state, just UI
 const NoConversationPlaceholder = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center p-6">
+      {/* Icon in a soft cyan circle */}
       <div className="size-20 bg-cyan-500/20 rounded-full flex items-center justify-center mb-6">
         <MessageCircleIcon className="size-10 text-cyan-400" />
       </div>
+
+      {/* Prompt text */}
       <h3 className="text-xl font-semibold text-slate-200 mb-2">
         Select a conversation
       </h3>

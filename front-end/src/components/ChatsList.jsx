@@ -3,18 +3,6 @@
  *
  * Rendered in the left sidebar when the "Chats" tab is active. Shows a list
  * of all users the logged-in user has previously exchanged messages with.
- *
- * Data: Calls getMyChatPartners() on mount to fetch the list. The backend
- * derives this by finding all messages involving the current user and
- * returning the unique set of the other party in each conversation.
- *
- * States:
- *  Loading  → <UsersLoadingSkeleton> (pulsing placeholder rows)
- *  Empty    → <NoChatsFound> (prompt to go to Contacts tab)
- *  Loaded   → Scrollable list of clickable user rows:
- *               - Avatar with online/offline indicator.
- *               - Username.
- *             Clicking a row calls setSelectedUser(chat) to open the chat.
  */
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
@@ -22,23 +10,22 @@ import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 import NoChatsFound from "./NoChatsFound";
 import { useAuthStore } from "../store/useAuthStore";
 
-/**
- * Render a list of chat partner items with avatars and online/offline indicators, handling loading and empty states.
- *
- * Triggers fetching of chat partners on mount and uses store state to determine whether to show a loading skeleton, a no-chats placeholder, or the mapped list of chat items. Each chat item sets the selected user when clicked.
- *
- * @returns {JSX.Element} A React element containing either a users loading skeleton, a no-chats placeholder, or the list of chat partner items.
- */
 function ChatsList() {
   const { getMyChatPartners, chats, isUsersLoading, setSelectedUser } =
     useChatStore();
+
+  // onlineUsers is a list of user IDs currently connected via socket.io
   const { onlineUsers } = useAuthStore();
 
+  // Fetch the chat partners list when the component first mounts
   useEffect(() => {
     getMyChatPartners();
   }, [getMyChatPartners]);
 
+  // Show skeleton placeholders while the data is loading
   if (isUsersLoading) return <UsersLoadingSkeleton />;
+
+  // Show a "no chats" message if there are no conversations yet
   if (chats.length === 0) return <NoChatsFound />;
 
   return (
@@ -50,16 +37,22 @@ function ChatsList() {
           onClick={() => setSelectedUser(chat)}
         >
           <div className="flex items-center gap-3">
-            <div
-              className={`avatar ${onlineUsers.includes(chat._id) ? "online" : "offline"}`}
-            >
-              <div className="size-12 rounded-full">
+            {/* Avatar with explicit green dot when online */}
+            <div className="relative flex-shrink-0">
+              <div className="size-12 rounded-full overflow-hidden">
                 <img
                   src={chat.profilePicture || "/avatar.png"}
                   alt={chat.username}
+                  className="size-full object-cover"
                 />
               </div>
+              {/* Green dot — only visible when this user is in the onlineUsers list */}
+              {onlineUsers.includes(chat._id) && (
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-800" />
+              )}
             </div>
+
+            {/* Username */}
             <h4 className="text-slate-200 font-medium truncate">
               {chat.username}
             </h4>
