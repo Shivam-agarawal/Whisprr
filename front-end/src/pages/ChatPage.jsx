@@ -9,10 +9,10 @@ import ChatContainer from "../components/ChatContainer";
 import NoConversationPlaceholder from "../components/NoConversationPlaceholder";
 
 /**
- * Render the main chat page layout with a left pane for profile, tab switch and lists, and a right pane for the active conversation or a placeholder.
+ * Render the main chat page layout with a left pane for profile, tab switch, and lists, and a right pane for the active conversation or a placeholder.
  *
- * The left pane displays ChatsList when the store's `activeTab` is "chats", otherwise ContactList. The right pane renders ChatContainer when the store's `selectedUser` is set, otherwise NoConversationPlaceholder.
- * @returns {JSX.Element} The chat page React element.
+ * The left pane shows ChatsList when the store's `activeTab` is "chats", otherwise ContactList. The right pane shows ChatContainer when the store's `selectedUser` is set, otherwise NoConversationPlaceholder.
+ * @returns {JSX.Element} The rendered chat page React element.
  */
 function ChatPage() {
   const { activeTab, selectedUser } = useChatStore();

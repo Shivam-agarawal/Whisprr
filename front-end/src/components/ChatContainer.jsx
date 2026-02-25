@@ -7,13 +7,10 @@ import MessageInput from "./MessageInput";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 
 /**
- * Render the main chat interface for the selected conversation.
+ * Render the chat interface for the currently selected conversation.
  *
- * Loads messages for the selected user, subscribes to live message updates (and unsubscribes on cleanup),
- * and auto-scrolls to the latest message when messages change.
- *
- * @returns {JSX.Element} A React element containing the chat header, a scrollable message list (with per-message alignment, timestamps, and optional images),
- * a loading skeleton while messages load, a placeholder when there is no history, and the message input area.
+ * Loads and subscribes to messages for the selected user, auto-scrolls to the latest message when messages update, and displays the header, a scrollable message list (sender-aligned bubbles with optional images and timestamps), a loading skeleton or no-history placeholder, and the message input.
+ * @returns {JSX.Element} The chat UI containing the header, message list or loading/placeholder state, and the message input.
  */
 function ChatContainer() {
   const {

@@ -5,10 +5,9 @@ import NoChatsFound from "./NoChatsFound";
 import { useAuthStore } from "../store/useAuthStore";
 
 /**
- * Render a list of chat partner items with avatars and online/offline indicators, handling loading and empty states.
+ * Render a list of chat partners with avatars and online/offline indicators and handle loading and empty states.
  *
- * Triggers fetching of chat partners on mount and uses store state to determine whether to show a loading skeleton, a no-chats placeholder, or the mapped list of chat items. Each chat item sets the selected user when clicked.
- *
+ * Fetches chat partners on mount and displays either a users loading skeleton, a no-chats placeholder, or the mapped list of clickable chat items that set the selected user when clicked.
  * @returns {JSX.Element} A React element containing either a users loading skeleton, a no-chats placeholder, or the list of chat partner items.
  */
 function ChatsList() {
