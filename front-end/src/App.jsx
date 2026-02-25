@@ -1,3 +1,25 @@
+/**
+ * App.jsx — Root Application Component & Router
+ *
+ * The top-level React component that wires together routing, authentication
+ * session restoration, and the global toast notification system.
+ *
+ * Behaviour on mount:
+ *  Calls checkAuth() once to hit GET /api/auth/check. If the JWT cookie is
+ *  still valid the server returns the user object and authUser is set in the
+ *  store. While this request is in flight, a full-screen PageLoader spinner
+ *  is shown instead of any page content.
+ *
+ * Routes:
+ *  /        → ChatPage    (authenticated users only; redirects to /login otherwise)
+ *  /login   → LoginPage   (unauthenticated only; redirects to / if already logged in)
+ *  /signup  → SignUpPage  (unauthenticated only; redirects to / if already logged in)
+ *
+ * Global UI:
+ *  <Toaster /> — renders react-hot-toast notifications anywhere in the app.
+ *  Decorative background grid and glow blobs are rendered here so they appear
+ *  behind all pages.
+ */
 import { Navigate, Route, Routes } from "react-router";
 import ChatPage from "./pages/ChatPage";
 import LoginPage from "./pages/LoginPage";

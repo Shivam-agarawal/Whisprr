@@ -1,3 +1,23 @@
+/**
+ * ProfileHeader.jsx — Logged-In User Profile Header (Sidebar Top)
+ *
+ * Displayed at the top of the left sidebar on the ChatPage. Shows the
+ * current user's avatar, username, online status, and action buttons.
+ *
+ * Features:
+ *  Avatar        — Clicking the avatar opens a file picker to upload a new
+ *                  profile picture. Selected images are shown as a local preview
+ *                  immediately (selectedImg state), then uploaded to Cloudinary
+ *                  via updateProfile(). Uses authUser.profilePicture for
+ *                  display — falls back to "/avatar.png" if not set.
+ *  Username      — Displays authUser.username.
+ *  Logout button — Calls useAuthStore.logout() (clears session & cookie).
+ *  Sound toggle  — Plays a mouse-click sound and calls useChatStore.toggleSound()
+ *                  to enable/disable keyboard typing sounds globally.
+ *
+ * Note: Profile picture field is `profilePicture` (matching the DB schema).
+ *       Do NOT use `profilePic` — that was a bug that has been fixed.
+ */
 import { useState, useRef } from "react";
 import { LogOutIcon, VolumeOffIcon, Volume2Icon } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
@@ -29,7 +49,7 @@ function ProfileHeader() {
     reader.onloadend = async () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
-      await updateProfile({ profilePic: base64Image });
+      await updateProfile({ profilePicture: base64Image });
     };
   };
 
@@ -44,7 +64,7 @@ function ProfileHeader() {
               onClick={() => fileInputRef.current.click()}
             >
               <img
-                src={selectedImg || authUser.profilePic || "/avatar.png"}
+                src={selectedImg || authUser.profilePicture || "/avatar.png"}
                 alt="User image"
                 className="size-full object-cover"
               />
@@ -65,7 +85,7 @@ function ProfileHeader() {
           {/* USERNAME & ONLINE TEXT */}
           <div>
             <h3 className="text-slate-200 font-medium text-base max-w-[180px] truncate">
-              {authUser.fullName}
+              {authUser.username}
             </h3>
 
             <p className="text-slate-400 text-xs">Online</p>

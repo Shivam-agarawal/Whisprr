@@ -1,3 +1,22 @@
+/**
+ * ContactList.jsx — All Contacts Sidebar List
+ *
+ * Rendered in the left sidebar when the "Contacts" tab is active. Shows
+ * every registered user except the currently logged-in user.
+ *
+ * Data: Calls getAllContacts() on mount to fetch the full user list
+ * from GET /api/messages/contacts.
+ *
+ * States:
+ *  Loading → <UsersLoadingSkeleton> (pulsing placeholder rows)
+ *  Loaded  → Scrollable list of clickable user rows:
+ *              - Avatar with online/offline indicator (from onlineUsers in store).
+ *              - Username.
+ *            Clicking a row calls setSelectedUser(contact) to open a chat
+ *            (even if no messages exist yet — shows NoChatHistoryPlaceholder).
+ *
+ * Note: Profile picture field on contact objects is `profilePicture`.
+ */
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton";

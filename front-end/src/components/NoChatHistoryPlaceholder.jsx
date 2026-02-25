@@ -1,6 +1,23 @@
+/**
+ * NoChatHistoryPlaceholder.jsx — Empty Conversation Placeholder
+ *
+ * Shown in ChatContainer's message area when a user is selected but no
+ * messages have been sent yet (messages array is empty and not loading).
+ *
+ * Props:
+ *  name            — The selected user's username, shown in the heading.
+ *  onQuickMessage  — Callback called with a message string when a quick-send
+ *                    button is clicked. Provided by ChatContainer and wired
+ *                    to useChatStore.sendMessage({ text, image: null }).
+ *
+ * Quick-Send Buttons:
+ *  "👋 Say Hello", "🤝 How are you?", "📅 Meet up soon?"
+ *  Each calls onQuickMessage?.(text) — the ?. guard means the component is
+ *  safe to render even if the prop is not provided.
+ */
 import { MessageCircleIcon } from "lucide-react";
 
-const NoChatHistoryPlaceholder = ({ name }) => {
+const NoChatHistoryPlaceholder = ({ name, onQuickMessage }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center p-6">
       <div className="w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-cyan-400/10 rounded-full flex items-center justify-center mb-5">
@@ -17,13 +34,22 @@ const NoChatHistoryPlaceholder = ({ name }) => {
         <div className="h-px w-32 bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent mx-auto"></div>
       </div>
       <div className="flex flex-wrap gap-2 justify-center">
-        <button className="px-4 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/10 rounded-full hover:bg-cyan-500/20 transition-colors">
+        <button
+          onClick={() => onQuickMessage?.("👋 Say Hello")}
+          className="px-4 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/10 rounded-full hover:bg-cyan-500/20 transition-colors"
+        >
           👋 Say Hello
         </button>
-        <button className="px-4 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/10 rounded-full hover:bg-cyan-500/20 transition-colors">
+        <button
+          onClick={() => onQuickMessage?.("🤝 How are you?")}
+          className="px-4 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/10 rounded-full hover:bg-cyan-500/20 transition-colors"
+        >
           🤝 How are you?
         </button>
-        <button className="px-4 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/10 rounded-full hover:bg-cyan-500/20 transition-colors">
+        <button
+          onClick={() => onQuickMessage?.("📅 Meet up soon?")}
+          className="px-4 py-2 text-xs font-medium text-cyan-400 bg-cyan-500/10 rounded-full hover:bg-cyan-500/20 transition-colors"
+        >
           📅 Meet up soon?
         </button>
       </div>
@@ -32,3 +58,4 @@ const NoChatHistoryPlaceholder = ({ name }) => {
 };
 
 export default NoChatHistoryPlaceholder;
+

@@ -1,3 +1,27 @@
+/**
+ * SignUpPage.jsx — New User Registration Page
+ *
+ * The full-page sign-up screen shown to unauthenticated users at /signup.
+ * Redirected away automatically if the user is already logged in (App.jsx).
+ *
+ * Layout (two-column on md+ screens):
+ *  Left  — Registration form: Full Name, Email, Password fields with icons,
+ *           a submit button that shows a spinner while isSigningUp is true,
+ *           and a "Login" link for existing users.
+ *  Right — Decorative illustration image (signup.png) with feature badges.
+ *
+ * Note on field naming:
+ *  The form uses `fullName` locally, but maps it to `username` before calling
+ *  signup() since the backend User model uses `username` (not `fullName`).
+ *
+ * Form submission calls useAuthStore.signup() which:
+ *  1. POSTs data to /api/auth/signup.
+ *  2. Sets authUser in the store on success, triggering a redirect to /.
+ *  3. Sends a welcome email via Resend (handled server-side).
+ *  4. Shows a toast error on failure.
+ *
+ * Client-side validation: all fields required, password min length 6.
+ */
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";

@@ -1,3 +1,24 @@
+/**
+ * ChatPage.jsx — Main Chat Application Page
+ *
+ * The primary protected page rendered at "/" for authenticated users.
+ * Contains the full two-panel chat layout wrapped in the animated border.
+ *
+ * Layout:
+ *  Left Panel  (w-80, fixed width):
+ *    - <ProfileHeader> — user avatar, username, logout & sound toggle buttons.
+ *    - <ActiveTabSwitch> — toggles between "Chats" and "Contacts" tabs.
+ *    - Tab content:
+ *        "chats"    → <ChatsList>    (users you've previously messaged)
+ *        "contacts" → <ContactList>  (all other registered users)
+ *
+ *  Right Panel (flex-1, takes remaining width):
+ *    - If a user is selected: <ChatContainer> (header + messages + input)
+ *    - If no user selected:   <NoConversationPlaceholder>
+ *
+ * State is read from useChatStore (activeTab, selectedUser).
+ * No local state — all managed in the Zustand store.
+ */
 import { useChatStore } from "../store/useChatStore";
 
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";

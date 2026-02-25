@@ -1,4 +1,16 @@
 /**
+ * MessagesLoadingSkeleton.jsx — Chat Messages Loading Skeleton
+ *
+ * Shown inside ChatContainer's message area while message history is being
+ * fetched from the server (isMessagesLoading is true in useChatStore).
+ *
+ * Renders 6 pulsing chat-bubble placeholders alternating between left-aligned
+ * (chat-start) and right-aligned (chat-end) positions, mimicking the layout
+ * of a real conversation while content loads.
+ *
+ * No props. Uses DaisyUI chat classes for bubble alignment.
+ */
+/**
  * Render a skeleton placeholder for a list of chat messages.
  *
  * Renders six pulsing chat-bubble placeholders that alternate alignment (start/end)

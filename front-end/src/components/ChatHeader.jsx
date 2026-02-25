@@ -1,3 +1,20 @@
+/**
+ * ChatHeader.jsx — Conversation Header (Top of Right Panel)
+ *
+ * Displayed at the top of ChatContainer. Shows information about the user
+ * whose conversation is currently open.
+ *
+ * Displays:
+ *  - The selected user's profile picture (falls back to "/avatar.png").
+ *  - Their username.
+ *  - Online / Offline status — determined by checking if selectedUser._id
+ *    is in the onlineUsers array from useAuthStore.
+ *  - A close (X) button that calls setSelectedUser(null) to deselect the user
+ *    and return to the NoConversationPlaceholder view.
+ *
+ * Keyboard shortcut: pressing the Escape key also closes the conversation.
+ *   The event listener is added on mount and cleaned up on unmount.
+ */
 import { XIcon } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
 import { useEffect } from "react";

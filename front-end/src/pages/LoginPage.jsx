@@ -1,3 +1,22 @@
+/**
+ * LoginPage.jsx — User Login Page
+ *
+ * The full-page login screen shown to unauthenticated users at /login.
+ * Redirected away automatically if the user is already logged in (App.jsx).
+ *
+ * Layout (two-column on md+ screens):
+ *  Left  — Login form with email and password fields, a submit button that
+ *           shows a spinner while isLoggingIn is true, and a "Sign Up" link.
+ *  Right — Decorative illustration image (login.png) with feature badges.
+ *
+ * Form submission calls useAuthStore.login() which:
+ *  1. POSTs credentials to /api/auth/login.
+ *  2. Sets authUser in the store on success (App.jsx then routes to /).
+ *  3. Shows a toast error on failure.
+ *
+ * Styling: Uses shared CSS utility classes (auth-input-label, auth-btn, etc.)
+ * defined in index.css, inside the animated border container.
+ */
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
