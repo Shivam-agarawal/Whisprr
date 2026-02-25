@@ -5,6 +5,13 @@ import { useChatStore } from "../store/useChatStore";
 
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
+/**
+ * Renders the user's profile header including avatar (click to change), display name, online status, a logout button, and a sound toggle.
+ *
+ * The avatar supports image selection and upload; selecting an image updates the preview and calls the profile update handler. The sound toggle plays a click feedback and toggles the app sound state.
+ *
+ * @returns {JSX.Element} The profile header UI element.
+ */
 function ProfileHeader() {
   const { logout, authUser, updateProfile } = useAuthStore();
   const { isSoundEnabled, toggleSound } = useChatStore();

@@ -4,6 +4,17 @@ import { useChatStore } from "../store/useChatStore";
 import toast from "react-hot-toast";
 import { ImageIcon, SendIcon, XIcon } from "lucide-react";
 
+/**
+ * Input area for composing a chat message with an optional image attachment.
+ *
+ * Provides a text field, an image picker that shows a preview and can be removed,
+ * and a send button. Selecting a non-image file shows a toast error. Submitting
+ * requires either text (trimmed) or an attached image; on submit it calls
+ * sendMessage with an object { text, image }, resets the inputs, and plays a
+ * keystroke sound when sound is enabled.
+ *
+ * @returns {JSX.Element} The rendered MessageInput component.
+ */
 function MessageInput() {
   const { playRandomKeyStrokeSound } = useKeyboardSound();
   const [text, setText] = useState("");

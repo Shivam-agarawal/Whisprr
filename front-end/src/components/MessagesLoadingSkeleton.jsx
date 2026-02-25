@@ -1,3 +1,11 @@
+/**
+ * Render a skeleton placeholder for a list of chat messages.
+ *
+ * Renders six pulsing chat-bubble placeholders that alternate alignment (start/end)
+ * to simulate loading chat messages.
+ *
+ * @returns {JSX.Element} A container element with six animated chat-bubble placeholders.
+ */
 function MessagesLoadingSkeleton() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">

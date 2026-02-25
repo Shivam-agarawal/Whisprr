@@ -1,3 +1,8 @@
+/**
+ * Renders a vertical stack of three skeleton placeholders representing loading user entries.
+ *
+ * @returns {JSX.Element} A container element with three skeleton blocks, each containing an avatar placeholder and two line placeholders.
+ */
 function UsersLoadingSkeleton() {
   return (
     <div className="space-y-2">

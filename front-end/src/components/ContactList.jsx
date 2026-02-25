@@ -3,6 +3,16 @@ import { useChatStore } from "../store/useChatStore";
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 
+/**
+ * Render a list of chat contacts with avatar, online/offline indicator, and click-to-select behavior.
+ *
+ * Renders a loading skeleton while contacts are being fetched. When loaded, displays each contact's
+ * avatar (fallback to "/avatar.png"), username, and an "online" indicator if the contact's `_id`
+ * appears in the auth store's `onlineUsers`. Clicking a contact calls the chat store's `setSelectedUser`
+ * with that contact.
+ *
+ * @returns {JSX.Element} A JSX element containing either the loading skeleton or the contact list.
+ */
 function ContactList() {
   const { getAllContacts, allContacts, setSelectedUser, isUsersLoading } =
     useChatStore();

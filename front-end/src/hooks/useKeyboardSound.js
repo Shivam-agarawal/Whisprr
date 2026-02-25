@@ -6,6 +6,11 @@ const keyStrokeSounds = [
   new Audio("/sounds/keystroke4.mp3"),
 ];
 
+/**
+ * Provides a handler to play a random keystroke sound from the module's sound pool.
+ *
+ * @returns {{ playRandomKeyStrokeSound: function }} An object exposing `playRandomKeyStrokeSound`, a function that resets and plays a randomly selected keystroke audio and logs playback errors. 
+ */
 function useKeyboardSound() {
   const playRandomKeyStrokeSound = () => {
     const randomSound =

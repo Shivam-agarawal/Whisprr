@@ -1,5 +1,10 @@
 import { useChatStore } from "../store/useChatStore";
 
+/**
+ * Renders a two-option tab switch ("Chats" and "Contacts") that updates the chat store's active tab when clicked.
+ *
+ * @returns {JSX.Element} A horizontal tab bar containing buttons to select the active chat view.
+ */
 function ActiveTabSwitch() {
   const { activeTab, setActiveTab } = useChatStore();
 
