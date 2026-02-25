@@ -1,5 +1,12 @@
 import { useChatStore } from "../store/useChatStore";
 
+/**
+ * Render a two-button tab control that reflects and updates the current active tab ("chats" or "contacts").
+ *
+ * Displays "Chats" and "Contacts" buttons and updates the active tab when a button is clicked.
+ * The rendered buttons apply different styling depending on which tab is active.
+ * @returns {JSX.Element} The tab switcher element.
+ */
 function ActiveTabSwitch() {
   const { activeTab, setActiveTab } = useChatStore();
 

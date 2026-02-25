@@ -4,6 +4,16 @@ import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 import NoChatsFound from "./NoChatsFound";
 import { useAuthStore } from "../store/useAuthStore";
 
+/**
+ * Render a list of chat conversation partners and handle selecting a chat partner.
+ *
+ * On mount, requests the current user's chat partners. While partners are loading it
+ * renders a loading skeleton; if no chats exist it renders an empty-state component.
+ * Otherwise it renders each chat item with avatar, username, and an online/offline indicator.
+ * Clicking an item sets that chat as the selected user in the chat store.
+ *
+ * @returns {JSX.Element} A React element containing either the loading skeleton, the empty-state, or the list of chat items.
+ */
 function ChatsList() {
   const { getMyChatPartners, chats, isUsersLoading, setSelectedUser } =
     useChatStore();
