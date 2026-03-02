@@ -31,12 +31,12 @@ import { connectDB } from "./lib/db.js";
 // (socket.js creates the http server that socket.io needs)
 import { app, server } from "./lib/socket.js";
 
+// __dirname doesn't exist in ES Modules — Path.resolve() gives the same result
+const __dirname = Path.resolve();
+
 // Load environment variables from root .env file
 // Path.resolve() gives the CWD (back-end/), so "../.env" reaches the root .env
 dotenv.config({ path: Path.resolve(__dirname, "../.env") });
-
-// __dirname doesn't exist in ES Modules — Path.resolve() gives the same result
-const __dirname = Path.resolve();
 
 // Use PORT from .env or default to 3000
 const PORT = process.env.PORT || 3000;
