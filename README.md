@@ -37,9 +37,7 @@
   <img src="front-end/public/login.png" alt="Login Page" width="47%" style="border-radius:8px; margin:4px"/>
   <img src="front-end/public/signup.png" alt="Signup Page" width="47%" style="border-radius:8px; margin:4px"/>
 </p>
-<p align="center">
-  <img src="front-end/public/screenshot-for-readme.png" alt="Chat Interface" width="96%" style="border-radius:8px; margin:4px"/>
-</p>
+
 
 ---
 
