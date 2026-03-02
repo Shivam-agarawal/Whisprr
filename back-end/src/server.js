@@ -31,8 +31,9 @@ import { connectDB } from "./lib/db.js";
 // (socket.js creates the http server that socket.io needs)
 import { app, server } from "./lib/socket.js";
 
-// Load environment variables from .env file into process.env
-dotenv.config();
+// Load environment variables from root .env file
+// Path.resolve() gives the CWD (back-end/), so "../.env" reaches the root .env
+dotenv.config({ path: Path.resolve(__dirname, "../.env") });
 
 // __dirname doesn't exist in ES Modules — Path.resolve() gives the same result
 const __dirname = Path.resolve();
