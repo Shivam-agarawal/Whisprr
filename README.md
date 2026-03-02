@@ -23,7 +23,7 @@
 
 <p align="center">
   <a href="https://whisprr-1ebn.onrender.com" target="_blank">
-    <img alt="Live Demo" src="https://img.shields.io/badge/🚀 Live Demo-whisprr--1ebn.onrender.com-6c47ff?style=for-the-badge"/>
+    <img alt="Live Demo" src="https://img.shields.io/badge/Live%20Demo-whisprr--1ebn.onrender.com-6c47ff?style=for-the-badge&logo=render&logoColor=white"/>
   </a>
 </p>
 
